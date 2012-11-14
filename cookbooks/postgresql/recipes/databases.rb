@@ -13,7 +13,7 @@ if node.has_key?("databases")
       end
 
       execute "postgres-createdb-#{name}" do
-          command "sudo -u postgres -- createdb -O #{info[:username]} #{name}"
+          command "sudo -u postgres -- createdb -E utf-8 -T template0 --locale=en_US.utf8 -O #{info[:username]} #{name}"
           not_if "sudo -u postgres -- psql -c \"SELECT datname FROM pg_database;\" | grep -i #{name}"
       end
 

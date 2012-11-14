@@ -13,6 +13,11 @@ end
   end
 end
 
+execute "alias-ack" do
+  command "echo 'alias ack=ack-grep' >> /home/#{node[:user][:username]}/.bashrc"
+  not_if "cat /home/#{node[:user][:username]}/.bashrc | grep ack"
+end
+
 if node.has_key?("user")
 
   user_info = node[:user]
