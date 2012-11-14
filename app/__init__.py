@@ -2,7 +2,6 @@
 from flask import Flask, render_template
 from flask.ext.sqlalchemy import SQLAlchemy
 from psycopg2.extras import register_hstore
-from flask_debugtoolbar import DebugToolbarExtension
 
 
 def create_app():
@@ -15,7 +14,9 @@ app.config.from_object('config')
 db = SQLAlchemy(app)
 register_hstore(db.engine.raw_connection(), True)
 
-toolbar = DebugToolbarExtension(app)
+if app.config['DEBUG']:
+    from flask_debugtoolbar import DebugToolbarExtension
+    toolbar = DebugToolbarExtension(app)
 
 
 @app.errorhandler(404)
