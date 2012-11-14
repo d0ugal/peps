@@ -20,3 +20,11 @@ node.virtualenvs.each do |name, info|
     command "/home/#{node[:user][:username]}/.virtualenvs/#{name}/bin/python /vagrant/manage.py fetch"
   end
 end
+
+template "/vagrant/config/local.py" do
+  source "local.py"
+  owner "vagrant"
+  group "vagrant"
+  mode 0644
+  action :create_if_missing
+end
