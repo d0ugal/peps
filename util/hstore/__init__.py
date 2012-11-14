@@ -71,12 +71,12 @@ def _parse_hstore(hstore_str):
     pair_match = HSTORE_PAIR_RE.match(hstore_str)
 
     while pair_match is not None:
-        key = pair_match.group('key')
+        key = unicode(pair_match.group('key'), 'utf-8')
         if pair_match.group('value_null'):
             value = None
         else:
             value = pair_match.group('value').replace(r'\"', '"')
-        result[key] = value
+        result[key] = unicode(value, 'utf-8')
 
         pos += pair_match.end()
 
@@ -249,7 +249,7 @@ class HSTORE(types.Concatenable, types.UserDefinedType):
             if value is not None and not isinstance(value, dict):
                 return _parse_hstore(value)
             else:
-                return value
+                return {unicode(k, 'utf-8'): unicode(v, 'utf-8') for k, v in value.items()}
         return process
 
 MutationDict.associate_with(HSTORE)

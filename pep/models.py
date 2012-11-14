@@ -1,12 +1,20 @@
-from app import db
+from datetime import datetime
 
-from util.hstore import Hstore
+from sqlalchemy import event, DDL
+
+from app import db
+from util.hstore import HSTORE
 
 
 class Pep(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
-    added = db.Column(db.DateTime, nullable=False)
-    pub_date = db.Column(db.DateTime, nullable=True)
+    number = db.Column(db.Integer, unique=True)
+    added = db.Column(db.DateTime, nullable=False, default=datetime.now())
 
-    properties = db.Column(Hstore, nullable=False, default={})
+    properties = db.Column(HSTORE, nullable=False, default={})
+    content = db.Column(db.Text)
+    filename = db.Column(db.String(100))
+
+trig_ddl = DDL("CREATE INDEX content_gin_idx ON pep USING gin(to_tsvector('english', content))")
+event.listen(Pep.__table__, 'after_create', trig_ddl.execute_if(dialect='postgresql'))

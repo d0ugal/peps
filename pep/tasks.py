@@ -1,8 +1,11 @@
-from requests import get
-from zipfile import ZipFile
-from tempfile import mkdtemp, NamedTemporaryFile
-from re import compile
 from glob import glob
+from re import compile
+from requests import get
+from tempfile import mkdtemp, NamedTemporaryFile
+from zipfile import ZipFile
+
+from pep.models import Pep
+from util.db import get_or_create
 
 zip_url = "http://hg.python.org/peps/archive/tip.zip"
 
@@ -25,22 +28,26 @@ def pep_numbers(base_dir):
 
 def pep_file_to_metadata(path):
 
-    lines = open(path).readlines()
+    pep_file = open(path)
+    contents = line = pep_file.read().decode('utf-8')
+    pep_file.seek(0)
+    lines = pep_file.readlines()
     metadata = {}
 
     for line in (l.strip() for l in lines):
+
+        line = line.decode('utf-8')
 
         if ':' not in line:
             break
 
         key, value = line.split(":", 1)
         key = key.strip().lower()
-        value = value.strip().lower()
+        value = value.strip()
 
         metadata[key] = value
 
-    metadata['filename'] = path
-    yield metadata
+    return path, contents, metadata
 
 
 def fetch_peps():
@@ -58,4 +65,12 @@ def fetch_peps():
     # We trust this zip file, otherwise shouldn't use extractall.
     z.extractall(tmp_dir)
 
-    return [(number, pep_file_to_metadata(filename)) for number, filename in pep_numbers(tmp_dir)]
+    results = ((number,) + pep_file_to_metadata(filename) for number, filename in pep_numbers(tmp_dir))
+
+    for number, path, contents, properties in results:
+
+        get_or_create(Pep, number=number, defaults={
+            'properties': properties,
+            'filename': path.rsplit("/")[-1],
+            'content': contents
+        })

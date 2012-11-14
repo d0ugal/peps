@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from flaskext.script import Manager
+from flask.ext.script import Manager
 
 from app import app, db
 manager = Manager(app)
@@ -22,7 +22,7 @@ def createdb(drop=False):
 def fetch():
 
     from pep.tasks import fetch_peps
-    print fetch_peps()
+    fetch_peps()
 
 if __name__ == "__main__":
     manager.run()
