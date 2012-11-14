@@ -1,8 +1,6 @@
 from flask import Blueprint, render_template
 from flask import request
 
-from sqlalchemy import func
-
 from pep.models import Pep
 
 mod = Blueprint('base', __name__)
@@ -21,9 +19,9 @@ def index():
 @mod.route('/search/')
 def search():
 
+    # blog_entries.search_vector @@ plainto_tsquery(:terms)
     q = request.args.get("q")
-    results = Pep.query.filter(func.to_tsvector('english', Pep.content)\
-        .match(func.plainto_tsquery(q)))
+    results = Pep.query.filter("to_tsvector('english', pep.content) @@ plainto_tsquery(:q)").params(q=q).limit(10)
 
     return render_template('base/index.html',
         peps=results,
