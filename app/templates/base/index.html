@@ -2,16 +2,16 @@
 
 {% block content %}
 
-<div class="hero-unit">
-	<h1>peps</h1>
+    {% for pep in peps %}
 
-    <h2>Latest Packages</h2>
+        <h1>{{ pep.number }} - {{ pep.properties.title }}</h1>
 
-    <p>
-        Total releases: <strong>{{ release_count }}</strong><br/>
-        Total packages: <strong>{{ package_count }}</strong>
-    </p>
+        <table>
+        {% for prop, value in pep.properties.items() %}
+            <tr><td>{{ prop }}</td><td>{{ value }}</td></tr>
+        {% endfor %}
+        </table>
 
-</div>
+    {% endfor %}
 
 {% endblock %}
