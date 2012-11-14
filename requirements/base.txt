@@ -1,0 +1,10 @@
+Babel
+Flask-Script
+Flask-SQLAlchemy
+Flask
+gunicorn
+Jinja2
+psycopg2
+requests
+#SQLAlchemy
+http://prdownloads.sourceforge.net/sqlalchemy/SQLAlchemy-0.8.0b1.tar.gz?download

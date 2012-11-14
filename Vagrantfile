@@ -16,6 +16,7 @@ Vagrant::Config.run do |config|
     chef.add_recipe "postgresql::databases"
     chef.add_recipe "python"
     chef.add_recipe "python::virtualenvs"
+    chef.add_recipe "dev"
 
     chef.json.merge!({
       :project_name => "peps",
@@ -31,7 +32,7 @@ Vagrant::Config.run do |config|
       },
       :virtualenvs => {
         :pep => {
-          :requirements => "/vagrant/dev_requirements.txt",
+          :requirements => "/vagrant/requirements/dev.txt",
           :main => true
         }
       }
