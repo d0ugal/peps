@@ -2,6 +2,7 @@ from flask import Blueprint, render_template
 from flask import request
 
 from pep.models import Pep
+from util.db import get_or_404, find
 
 mod = Blueprint('base', __name__)
 
@@ -19,10 +20,20 @@ def index():
 @mod.route('/search/')
 def search():
 
-    # blog_entries.search_vector @@ plainto_tsquery(:terms)
     q = request.args.get("q")
+    find
     results = Pep.query.filter("to_tsvector('english', pep.content) @@ plainto_tsquery(:q)").params(q=q).limit(10)
 
     return render_template('base/index.html',
         peps=results,
+    )
+
+
+@mod.route('/<int:pep_number>/')
+def pep_view(pep_number):
+
+    pep = get_or_404(Pep, number=pep_number)
+
+    return render_template('base/pep_view.html',
+        pep=pep,
     )

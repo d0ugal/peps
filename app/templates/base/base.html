@@ -1,31 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-
     <meta charset="utf-8">
-    <title>Index of Python Enhancement Proposals (PEPs)</title>
-    <meta name="author" content="Dougal Matthews">
+    <title>Alternative Index of Python Enhancement Proposals (PEPs)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
+    <link href="{{ url_for('static', filename='bootstrap/css/bootstrap-responsive.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='bootstrap/css/bootstrap.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='pep.css') }}" rel="stylesheet">
 
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="shortcut icon" href="../assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{ url_for('static', filename='ico/apple-touch-icon-144-precomposed.png') }}">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ url_for('static', filename='ico/apple-touch-icon-114-precomposed.png') }}">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{ url_for('static', filename='ico/apple-touch-icon-72-precomposed.png') }}">
+    <link rel="apple-touch-icon-precomposed" href="{{ url_for('static', filename='ico/apple-touch-icon-57-precomposed.png') }}">
   </head>
 
   <body>
 
-      <ul>
-        <li>All</li>
-        <li>Search</li>
-        <li>About</li>
-      </ul>
+    <div class="container-narrow">
 
-      <form action="/search/">
-        <input type="text" name="q" />
-        <input type="submit" value="Search" />
-      </form>
+      <div class="masthead">
+        <div class="pull-right">
+          <form action="/search/">
+            <input class="input-block-level search" type="text" name="q" placeholder="..."/>
+            <input class="btn" type="submit" value="search" />
+          </form>
+        </div>
+        <h3><a href="/">Alternative Index of Python Enhancement Proposals (PEPs)</a></h3>
+      </div>
 
-      {% block content %}
+      <hr>
 
-      {% endblock %}
+      <div class="row-fluid marketing">
+        {% block content %}{% endblock %}
+      </div>
+
+      <hr>
+
+      <div class="footer">
+        <p>&copy; Company 2012</p>
+      </div>
+
+    </div>
 
   </body>
 </html>

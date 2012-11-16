@@ -29,9 +29,10 @@ def server_error(error):
     return render_template('500.html'), 404
 
 
-from app.util.template import format_datetime_filter, nl2br, rst_to_html
+from util.template import format_datetime_filter, nl2br, rst_to_html, literalnl2br
 app.jinja_env.filters['datetime'] = format_datetime_filter
 app.jinja_env.filters['nl2br'] = nl2br
+app.jinja_env.filters['literalnl2br'] = literalnl2br
 app.jinja_env.filters['rst_to_html'] = rst_to_html
 
 from app import views

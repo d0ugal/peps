@@ -4,7 +4,7 @@
 
     {% for pep in peps %}
 
-        <h1>{{ pep.number }} - {{ pep.properties.title }}</h1>
+        <h3><a href="/{{ pep.number }}/">{{ pep.number }} - {{ pep.properties.title }}</a></h3>
 
         <table>
         {% for prop, value in pep.properties.items() %}

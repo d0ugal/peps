@@ -1,0 +1,9 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+
+        <h2>{{ pep.number }} - {{ pep.properties.title }}</h1>
+
+        {{ pep.content|literalnl2br }}
+
+{% endblock %}
