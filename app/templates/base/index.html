@@ -2,15 +2,29 @@
 
 {% block content %}
 
+    <h3>PEP 0 - List All The PEPs</h3>
+
     {% for pep in peps %}
 
-        <h3><a href="/{{ pep.number }}/">{{ pep.number }} - {{ pep.properties.title }}</a></h3>
+        <div class="span-6">
+            <a href="/{{ pep.number }}/">
+                PEP {{ "%04d"|format(pep.number) }} -- {{ pep.properties.title }}
+            </a>
 
-        <table>
-        {% for prop, value in pep.properties.items() %}
-            <tr><td>{{ prop }}</td><td>{{ value }}</td></tr>
-        {% endfor %}
-        </table>
+            <div class="btn-group">
+                {% if pep.properties.status %}
+                <button class="btn btn-mini">
+                    <a href="?status={{ pep.properties.status }}">{{ pep.properties.status }}</a>
+                </button>
+                {% endif %}
+                {% if pep.properties.type %}
+                <button class="btn btn-mini">
+                    <a href="?type={{ pep.properties.type }}">{{ pep.properties.type }}</a>
+                </button>
+                {% endif %}
+            </div>
+
+        </div>
 
     {% endfor %}
 

@@ -4,6 +4,6 @@
 
         <h2>{{ pep.number }} - {{ pep.properties.title }}</h1>
 
-        {{ pep.content|literalnl2br }}
+        {{ pep.content|safe }}
 
 {% endblock %}

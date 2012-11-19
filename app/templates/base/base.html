@@ -24,19 +24,19 @@
 
   <body>
 
-    <div class="container-narrow">
+    <div class="container-narrow navbar-inner">
 
       <div class="masthead">
         <div class="pull-right">
-          <form action="/search/">
-            <input class="input-block-level search" type="text" name="q" placeholder="..."/>
-            <input class="btn" type="submit" value="search" />
+          <form class="navbar-form pull-left" action="search">
+            <input type="text" class="span2" name="q">
+            <button type="submit" class="btn">Submit</button>
           </form>
         </div>
         <h3><a href="/">Alternative Index of Python Enhancement Proposals (PEPs)</a></h3>
       </div>
 
-      <hr>
+      <hr/>
 
       <div class="row-fluid marketing">
         {% block content %}{% endblock %}

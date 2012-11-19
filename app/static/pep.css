@@ -2,12 +2,14 @@ body{
     font-family: 'Ubuntu Mono', monospace;
     padding-top: 20px;
     padding-bottom: 40px;
+    background-color: #f0f0f0;
 }
 
 /* Custom container */
 .container-narrow {
     margin: 0 auto;
     max-width: 900px;
+    border: #444;
 }
 .container-narrow > hr {
     margin: 30px 0;
@@ -27,7 +29,6 @@ body{
 }
 
 .marketing {
-    margin: 60px 0;
 }
 .marketing p + h4 {
     margin-top: 28px;

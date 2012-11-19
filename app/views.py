@@ -10,7 +10,13 @@ mod = Blueprint('base', __name__)
 @mod.route('/')
 def index():
 
-    latest = Pep.query.order_by(Pep.number.desc()).limit(10)
+    latest = Pep.query.order_by(Pep.number.asc())
+
+    if 'status' in request.args:
+        latest = latest.filter(Pep.properties.contains({'status': request.args.get('status')}))
+
+    if 'type' in request.args:
+        latest = latest.filter(Pep.properties.contains({'type': request.args.get('type')}))
 
     return render_template('base/index.html',
         peps=latest,
