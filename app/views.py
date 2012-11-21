@@ -30,7 +30,8 @@ def search():
     find
     results = Pep.query.filter("to_tsvector('english', pep.content) @@ plainto_tsquery(:q)").params(q=q).limit(10)
 
-    return render_template('base/index.html',
+    return render_template('base/search.html',
+        term=q,
         peps=results,
     )
 

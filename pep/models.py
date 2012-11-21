@@ -10,7 +10,8 @@ class Pep(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     number = db.Column(db.Integer, unique=True)
-    added = db.Column(db.DateTime, nullable=False, default=datetime.now())
+    added = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    updated = db.Column(db.DateTime, nullable=False, default=datetime.now)
 
     properties = db.Column(HSTORE, nullable=False, default={})
     content = db.Column(db.Text)

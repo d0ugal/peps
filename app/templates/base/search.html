@@ -1,0 +1,31 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+
+    <h3>PEP Search for '{{ term }}'</h3>
+
+    {% for pep in peps %}
+
+        <div class="span-6">
+            <a href="/{{ pep.number }}/">
+                PEP {{ "%04d"|format(pep.number) }} -- {{ pep.properties.title }}
+            </a>
+
+            <div class="btn-group">
+                {% if pep.properties.status %}
+                <button class="btn btn-mini">
+                    <a href="?status={{ pep.properties.status }}">{{ pep.properties.status }}</a>
+                </button>
+                {% endif %}
+                {% if pep.properties.type %}
+                <button class="btn btn-mini">
+                    <a href="?type={{ pep.properties.type }}">{{ pep.properties.type }}</a>
+                </button>
+                {% endif %}
+            </div>
+
+        </div>
+
+    {% endfor %}
+
+{% endblock %}

@@ -1,9 +1,21 @@
 {% extends "base/base.html" %}
 
+{% block title %} PEP {{ "%04d"|format(pep.number) }} -- {{ pep.properties.title }} -- {% endblock %}
+
 {% block content %}
 
-        <h2>{{ pep.number }} - {{ pep.properties.title }}</h1>
+        <h2>PEP {{ "%04d"|format(pep.number) }} -- {{ pep.properties.title }}</h1>
 
-        {{ pep.content|safe }}
+        <div class="table-div">
+            <table class="table table-striped table-bordered table-condensed">
+            {% for k,v in pep.properties.items() %}
+                <tr><td>{{ k }}</td><td>{{ v }}</td></tr>
+            {% endfor %}
+            </table>
+        </div>
+
+        <div class="pep-body">
+            {{ pep.content|safe }}
+        </div>
 
 {% endblock %}
