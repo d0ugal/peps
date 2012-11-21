@@ -4,7 +4,7 @@ from flask import abort
 from app import db
 
 
-def get_or_create(model, **kwargs):
+def get_or_create(model, commit=True, **kwargs):
 
     defaults = kwargs.pop('defaults', {})
     lookup = kwargs.copy()
@@ -15,8 +15,11 @@ def get_or_create(model, **kwargs):
     except NoResultFound:
         lookup.update(defaults)
         model_instance = model(**lookup)
+        # TODO: If commt = False is passed in should it be adde to the
+        # session? I'm not sure really.
         db.session.add(model_instance)
-        db.session.commit()
+        if commit:
+            db.session.commit()
         created = True
 
     return model_instance, created
