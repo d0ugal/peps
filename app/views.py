@@ -37,6 +37,7 @@ def search():
         peps=results,
     )
 
+
 @mod.route('/<int:pep_number>/')
 @cached()
 def pep_view(pep_number):
@@ -46,6 +47,7 @@ def pep_view(pep_number):
     return render_template('base/pep_view.html',
         pep=pep,
     )
+
 
 @mod.route('/<int:pep_number>.txt')
 @cached()
