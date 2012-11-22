@@ -10,7 +10,6 @@
     <link href="{{ url_for('static', filename='bootstrap/css/bootstrap-responsive.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='bootstrap/css/bootstrap.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='pep.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='rainbow/themes/github.css') }}" rel="stylesheet">
 
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -35,6 +34,9 @@
         </div>
         <h3><a href="/">Alternative Index of Python Enhancement Proposals (PEPs)</a></h3>
       </div>
+    </div>
+
+    <div class="container-narrow navbar-inner">
 
       <div class="row-fluid marketing">
         {% block content %}{% endblock %}

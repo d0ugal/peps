@@ -4,6 +4,10 @@
 
 {% block content %}
 
+        {% if pep.properties['content-type'] == 'text/x-rst' %}
+            <link href="{{ url_for('static', filename='rainbow/themes/github.css') }}" rel="stylesheet">
+        {% endif %}
+
         <h2>PEP {{ "%04d"|format(pep.number) }} -- {{ pep.properties.title }}</h1>
 
         <div class="table-div">
