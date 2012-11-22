@@ -1,13 +1,15 @@
 from flask import Blueprint, render_template
-from flask import request
+from flask import request, Response
 
 from pep.models import Pep
 from util.db import get_or_404, find
+from util.cache import cached
 
 mod = Blueprint('base', __name__)
 
 
 @mod.route('/')
+@cached()
 def index():
 
     latest = Pep.query.order_by(Pep.number.asc())
@@ -35,8 +37,8 @@ def search():
         peps=results,
     )
 
-
 @mod.route('/<int:pep_number>/')
+@cached()
 def pep_view(pep_number):
 
     pep = get_or_404(Pep, number=pep_number)
@@ -44,3 +46,11 @@ def pep_view(pep_number):
     return render_template('base/pep_view.html',
         pep=pep,
     )
+
+@mod.route('/<int:pep_number>.txt')
+@cached()
+def pep_view_raw(pep_number):
+
+    pep = get_or_404(Pep, number=pep_number)
+
+    return Response(pep.raw_content, mimetype='text/plain')

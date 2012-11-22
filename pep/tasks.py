@@ -5,8 +5,6 @@ from tempfile import mkdtemp, NamedTemporaryFile
 from zipfile import ZipFile
 from docutils.utils import SystemMessage
 from docutils import core
-from sys import stderr
-from cgi import escape
 
 from app import db
 from pep.models import Pep
@@ -124,7 +122,9 @@ def pep_file_to_metadata(path):
     elif pep_type == 'text/x-rst':
         contents = rst2html(lines)
 
-    return path, contents, dict(metadata)
+    raw = ''.join(lines)
+
+    return path, raw, contents, dict(metadata)
 
 
 def fetch_peps():
@@ -145,12 +145,13 @@ def fetch_peps():
     results = ((number,) + pep_file_to_metadata(filename)
         for number, filename in pep_numbers(tmp_dir))
 
-    for number, path, contents, properties in results:
+    for number, path, raw, contents, properties in results:
 
         pep, created = get_or_create(Pep, commit=False, number=number, defaults={
             'properties': properties,
             'filename': path.rsplit("/")[-1],
-            'content': contents
+            'content': contents,
+            'raw_content': raw,
         })
 
         if not created:
