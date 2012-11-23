@@ -71,7 +71,12 @@ def rst2html(lines):
             reader_name='pep',
             parser_name='restructuredtext',
             writer_name='pep_html',
-            settings_overrides={'report_level': 'quiet', 'traceback': 1})
+            settings_overrides={
+                'report_level': 'quiet',
+                'traceback': 1,
+                'pep_base_url': '/',
+                'pep_file_url_template': '%d/'
+            })
     except SystemMessage:
         raise
         return input_string
