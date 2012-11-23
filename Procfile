@@ -1,1 +1,1 @@
-web: gunicorn app:app -b 0.0.0.0:$PORT -w 10 -k gevent
+web: gunicorn app:app -b 0.0.0.0:$PORT -w 1 -k gevent
