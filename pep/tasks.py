@@ -127,6 +127,68 @@ def pep_file_to_metadata(path):
     return path, raw, contents, dict(metadata)
 
 
+def sort_peps(peps):
+    """Sort PEPs into meta, informational, accepted, open, finished,
+    and essentially dead."""
+    meta = []
+    info = []
+    accepted = []
+    open_ = []
+    finished = []
+    historical = []
+    deferred = []
+    dead = []
+    for pep in peps:
+
+        status = pep.properties['status']
+        type_ = pep.properties['type']
+        title = pep.properties['title']
+        # Order of 'if' statement important.  Key Status values take precedence
+        # over Type value, and vice-versa.
+        if status == 'Draft':
+            open_.append(pep)
+        elif status == 'Deferred':
+            deferred.append(pep)
+        elif type_ == 'Process':
+            if status == "Active":
+                meta.append(pep)
+            elif status in ("Withdrawn", "Rejected"):
+                dead.append(pep)
+            else:
+                historical.append(pep)
+        elif status in ('Rejected', 'Withdrawn',
+                            'Incomplete', 'Superseded'):
+            dead.append(pep)
+        elif type_ == 'Informational':
+            # Hack until the conflict between the use of "Final"
+            # for both API definition PEPs and other (actually
+            # obsolete) PEPs is addressed
+            if (status == "Active" or
+                "Release Schedule" not in title):
+                info.append(pep)
+            else:
+                historical.append(pep)
+        elif status in ('Accepted', 'Active'):
+            accepted.append(pep)
+        elif status == 'Final':
+            finished.append(pep)
+        else:
+            raise Exception("unsorted (%s/%s)" %
+                           (type_, status),
+                           pep.filename, pep.number)
+
+    return (
+        ('Meta-PEPs (PEPs about PEPs or Processes)', meta,),
+        ('Other Informational PEPs', info,),
+        ('Accepted PEPs (accepted; may not be implemented yet)', accepted,),
+        ('Open PEPs (under consideration)', open_,),
+        ('Finished PEPs (done, implemented in code repository)', finished,),
+        ('Historical Meta-PEPs and Informational PEPs', historical,),
+        ('Deferred PEPs', deferred,),
+        ('Abandoned, Withdrawn, and Rejected PEPs', dead,),
+    )
+
+
 def fetch_peps():
 
     tmp_file = NamedTemporaryFile(delete=False)

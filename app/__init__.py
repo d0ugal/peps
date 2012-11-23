@@ -19,7 +19,9 @@ cache = SimpleCache()
 
 if app.config['DEBUG']:
     from flask_debugtoolbar import DebugToolbarExtension
+    from werkzeug.contrib.cache import NullCache
     toolbar = DebugToolbarExtension(app)
+    cache = NullCache()
 
 
 @app.errorhandler(404)

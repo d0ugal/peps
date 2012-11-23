@@ -2,6 +2,7 @@ from flask import Blueprint, render_template
 from flask import request, Response
 
 from pep.models import Pep
+from pep.tasks import sort_peps
 from util.db import get_or_404, find
 from util.cache import cached
 
@@ -12,16 +13,18 @@ mod = Blueprint('base', __name__)
 @cached()
 def index():
 
-    latest = Pep.query.order_by(Pep.number.asc())
+    peps = Pep.query.order_by(Pep.number.asc())
 
     if 'status' in request.args:
-        latest = latest.filter(Pep.properties.contains({'status': request.args.get('status')}))
+        peps = peps.filter(Pep.properties.contains({'status': request.args.get('status')}))
 
     if 'type' in request.args:
-        latest = latest.filter(Pep.properties.contains({'type': request.args.get('type')}))
+        peps = peps.filter(Pep.properties.contains({'type': request.args.get('type')}))
+
+    sorted_peps = sort_peps(peps)
 
     return render_template('base/index.html',
-        peps=latest,
+        sorted_peps=sorted_peps,
     )
 
 
