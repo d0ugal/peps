@@ -3,7 +3,7 @@ from flask import request, Response
 
 from pep.models import Pep
 from pep.tasks import sort_peps
-from util.db import get_or_404, find
+from util.db import get_or_404
 from util.cache import cached
 
 mod = Blueprint('base', __name__)
@@ -32,7 +32,6 @@ def index():
 def search():
 
     q = request.args.get("q")
-    find
     results = Pep.query.filter("to_tsvector('english', pep.content) @@ plainto_tsquery(:q)").params(q=q)
 
     return render_template('base/search.html',
