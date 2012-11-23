@@ -10,7 +10,7 @@ mod = Blueprint('base', __name__)
 
 
 @mod.route('/')
-@cached()
+@cached(timeout=60 * 60)
 def index():
 
     peps = Pep.query.order_by(Pep.number.asc())
@@ -42,7 +42,7 @@ def search():
 
 
 @mod.route('/<int:pep_number>/')
-@cached()
+@cached(timeout=60 * 60)
 def pep_view(pep_number):
 
     pep = get_or_404(Pep, number=pep_number)
@@ -53,7 +53,7 @@ def pep_view(pep_number):
 
 
 @mod.route('/<int:pep_number>.txt')
-@cached()
+@cached(timeout=60 * 60)
 def pep_view_raw(pep_number):
 
     pep = get_or_404(Pep, number=pep_number)
