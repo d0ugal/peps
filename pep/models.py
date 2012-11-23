@@ -24,3 +24,4 @@ class Pep(db.Model):
 
 trig_ddl = DDL("CREATE INDEX content_gin_idx ON pep USING gin(to_tsvector('english', content))")
 event.listen(Pep.__table__, 'after_create', trig_ddl.execute_if(dialect='postgresql'))
+event.listen(Pep.__table__, 'before_create', DDL("CREATE EXTENSION IF NOT EXISTS hstore").execute_if(dialect='postgresql'))
