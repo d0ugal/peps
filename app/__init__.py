@@ -13,7 +13,6 @@ app = create_app()
 app.config.from_object('config')
 
 db = SQLAlchemy(app)
-db.engine.execute("CREATE EXTENSION IF NOT EXISTS hstore")
 register_hstore(db.engine.raw_connection(), True)
 
 cache = SimpleCache()
