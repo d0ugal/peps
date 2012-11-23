@@ -8,31 +8,35 @@
 
         {% for group, peps in sorted_peps %}
 
-            <h4>{{ group }}</h4>
+            {% if peps|length > 0 %}
 
-            {% for pep in peps %}
+                <h4>{{ group }}</h4>
 
-                <div class="span-6">
-                    <a href="/{{ pep.number }}/">
-                        PEP {{ "%04d"|format(pep.number) }} -- {{ pep.properties.title }}
-                    </a>
+                {% for pep in peps %}
 
-                    <div class="btn-group">
-                        {% if pep.properties.status %}
-                        <button class="btn btn-mini">
-                            <a href="?status={{ pep.properties.status }}">{{ pep.properties.status }}</a>
-                        </button>
-                        {% endif %}
-                        {% if pep.properties.type %}
-                        <button class="btn btn-mini">
-                            <a href="?type={{ pep.properties.type }}">{{ pep.properties.type }}</a>
-                        </button>
-                        {% endif %}
+                    <div class="span-6">
+                        <a href="/{{ pep.number }}/">
+                            PEP {{ "%04d"|format(pep.number) }} -- {{ pep.properties.title }}
+                        </a>
+
+                        <div class="btn-group">
+                            {% if pep.properties.status %}
+                            <button class="btn btn-mini">
+                                <a href="?status={{ pep.properties.status }}">{{ pep.properties.status }}</a>
+                            </button>
+                            {% endif %}
+                            {% if pep.properties.type %}
+                            <button class="btn btn-mini">
+                                <a href="?type={{ pep.properties.type }}">{{ pep.properties.type }}</a>
+                            </button>
+                            {% endif %}
+                        </div>
+
                     </div>
 
-                </div>
+                {% endfor %}
 
-            {% endfor %}
+            {% endif %}
 
         {% endfor %}
 
