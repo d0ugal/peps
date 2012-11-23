@@ -33,7 +33,7 @@ def search():
 
     q = request.args.get("q")
     find
-    results = Pep.query.filter("to_tsvector('english', pep.content) @@ plainto_tsquery(:q)").params(q=q).limit(10)
+    results = Pep.query.filter("to_tsvector('english', pep.content) @@ plainto_tsquery(:q)").params(q=q)
 
     return render_template('base/search.html',
         term=q,
