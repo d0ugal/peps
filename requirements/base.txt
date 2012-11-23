@@ -3,6 +3,7 @@ docutils==0.9.1
 Flask-Script==0.5.1
 Flask-SQLAlchemy==0.16
 Flask==0.9
+gevent==0.13.8
 gunicorn==0.15.0
 Jinja2==2.6
 psycopg2==2.4.5

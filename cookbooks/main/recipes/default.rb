@@ -7,7 +7,7 @@ execute "update-apt" do
   command "sudo apt-get update"
 end
 
-%w{ack-grep aptitude vim git-core libxslt1-dev}.each do |pkg|
+%w{ack-grep aptitude vim git-core libxslt1-dev build-essential libevent-dev}.each do |pkg|
   package pkg do
   action :install
   end
