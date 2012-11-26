@@ -17,10 +17,14 @@ def index():
     peps = Pep.query.order_by(Pep.number.asc())
 
     if 'status' in request.args:
-        peps = peps.filter(Pep.properties.contains({'status': request.args.get('status')}))
+        peps = peps.filter(Pep.properties.contains({
+            'status': request.args.get('status'),
+        }))
 
     if 'type' in request.args:
-        peps = peps.filter(Pep.properties.contains({'type': request.args.get('type')}))
+        peps = peps.filter(Pep.properties.contains({
+            'type': request.args.get('type'),
+        }))
 
     sorted_peps = sort_peps(peps)
 
@@ -39,8 +43,8 @@ def search():
         pep.id AS pep_id, pep.number AS pep_number, ts_headline('english', pep.title, query) AS pep_title,
         pep.added AS pep_added, pep.updated AS pep_updated, pep.properties AS
         pep_properties, pep.filename AS pep_filename,
-        ts_rank_cd('{0.1, 0.2, 0.9, 1.0}', search_col, query) AS rank
-    FROM pep, to_tsquery(:q) query
+        ts_rank_cd('{0.1, 0.8, 0.9, 1.0}', search_col, query) AS rank
+    FROM pep, plainto_tsquery(:q) query
     WHERE query @@ search_col
     ORDER BY rank DESC;
     """

@@ -33,6 +33,7 @@ begin
   new.search_col :=
     setweight(to_tsvector('english', new.number || ''), 'A') ||
     setweight(to_tsvector('english', coalesce(new.title,'')), 'B') ||
+    setweight(to_tsvector('english', coalesce(new.properties->'author','')), 'C') ||
     setweight(to_tsvector('english', coalesce(new.content,'')), 'D');
   return new;
 end
