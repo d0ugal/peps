@@ -1,10 +1,10 @@
+from docutils import core
+from docutils.utils import SystemMessage
 from glob import glob
 from re import compile
 from requests import get
 from tempfile import mkdtemp, NamedTemporaryFile
 from zipfile import ZipFile
-from docutils.utils import SystemMessage
-from docutils import core
 
 from app import db
 from pep.models import Pep
@@ -14,6 +14,10 @@ zip_url = "http://hg.python.org/peps/archive/tip.zip"
 
 
 def pep_numbers(base_dir):
+    """
+    Given the base directory for an extracted pep repo, yield a 2-tuple of
+    pep numbers and full paths to the pep file.
+    """
 
     matcher = compile("(\d+)")
 
@@ -50,6 +54,10 @@ def get_pep_type(input_lines):
 
 
 def text2html(input_lines):
+    """
+    Render a text (non-rst) pep as HTML. This uses all of the original code in
+    pep2html.py convertor in the pep repo.
+    """
 
     from pep2html import fixfile
     from StringIO import StringIO
@@ -62,30 +70,34 @@ def text2html(input_lines):
 
 
 def rst2html(lines):
+    """
+    Use docutils to render the RST peps.
+    """
     input_string = ''.join(lines)
-    try:
-        parts = core.publish_parts(
-            source=input_string,
-            source_path="inpath",
-            destination_path="outfile.name",
-            reader_name='pep',
-            parser_name='restructuredtext',
-            writer_name='pep_html',
-            settings_overrides={
-                'report_level': 'quiet',
-                'traceback': 1,
-                'pep_base_url': '/',
-                'pep_file_url_template': '%d/'
-            })
-    except SystemMessage:
-        raise
-        return input_string
+
+    parts = core.publish_parts(
+        source=input_string,
+        source_path="inpath",
+        destination_path="outfile.name",
+        reader_name='pep',
+        parser_name='restructuredtext',
+        writer_name='pep_html',
+        settings_overrides={
+            'report_level': 'quiet',
+            'traceback': 1,
+            'pep_base_url': '/',
+            'pep_file_url_template': '%d/'
+        })
 
     # nasty hack in the end here. Sorry, but meh.
     return (parts['body_pre_docinfo'] + parts['fragment']).replace("<hr />", "")
 
 
 def pep_file_to_metadata(path):
+    """
+    Badly named function that gets all the pep data and returns a tuple with
+    its various properties and the rendered HTML.
+    """
 
     pep_file = open(path)
     lines = pep_file.readlines()
@@ -105,7 +117,6 @@ def pep_file_to_metadata(path):
 
         if line[0].strip():
             if ":" not in line:
-                print "BREAK", line
                 break
             key, value = line.split(":", 1)
             key = key.strip().lower()
@@ -133,8 +144,11 @@ def pep_file_to_metadata(path):
 
 
 def sort_peps(peps):
-    """Sort PEPs into meta, informational, accepted, open, finished,
-    and essentially dead."""
+    """
+    Sort PEPs into meta, informational, accepted, open, finished,
+    and essentially dead.
+    This logic is taken from pep2html.py
+    """
     meta = []
     info = []
     accepted = []
