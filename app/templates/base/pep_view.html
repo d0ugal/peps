@@ -1,6 +1,6 @@
 {% extends "base/base.html" %}
 
-{% block title %} PEP {{ "%04d"|format(pep.number) }} -- {{ pep.properties.title }} -- {% endblock %}
+{% block title %} PEP {{ pep.number }} -- {{ pep.title }} -- {% endblock %}
 
 {% block content %}
 
@@ -8,7 +8,7 @@
             <link href="{{ url_for('static', filename='rainbow/themes/github.css') }}" rel="stylesheet">
         {% endif %}
 
-        <h2>PEP {{ "%04d"|format(pep.number) }} -- {{ pep.properties.title }}</h1>
+        <h2>PEP {{ pep.number }} -- {{ pep.title }}</h1>
 
         <div class="table-div">
             <table class="table table-striped table-bordered table-condensed">

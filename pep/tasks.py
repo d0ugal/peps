@@ -147,7 +147,7 @@ def sort_peps(peps):
 
         status = pep.properties['status']
         type_ = pep.properties['type']
-        title = pep.properties['title']
+        title = pep.title
         # Order of 'if' statement important.  Key Status values take precedence
         # over Type value, and vice-versa.
         if status == 'Draft':
@@ -214,7 +214,9 @@ def fetch_peps():
 
     for number, path, raw, contents, properties in results:
 
-        pep, created = get_or_create(Pep, commit=False, number=number, defaults={
+        title = properties.pop('title')
+
+        pep, created = get_or_create(Pep, commit=False, number=number, title=title, defaults={
             'properties': properties,
             'filename': path.rsplit("/")[-1],
             'content': contents,

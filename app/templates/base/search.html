@@ -8,7 +8,7 @@
 
         <div class="span-6">
             <a href="/{{ pep.number }}/">
-                PEP {{ "%04d"|format(pep.number) }} -- {{ pep.properties.title }}
+                PEP {{ "%04d"|format(pep.number) }} -- {{ pep.title|safe }}
             </a>
 
             <div class="btn-group">
