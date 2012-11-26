@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+      <loc>{{url_root}}/</loc>
+      <changefreq>weekly</changefreq>
+    </url>
+    {% for pep_id in pep_ids %}<url>
+      <loc>{{url_root}}/{{pep_id}}/</loc>
+      <changefreq>weekly</changefreq>
+    </url>{% endfor %}
+</urlset>

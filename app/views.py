@@ -71,3 +71,11 @@ def pep_view_raw(pep_number):
     pep = get_or_404(Pep.query.options(undefer('raw_content')), number=pep_number)
 
     return Response(pep.raw_content, mimetype='text/plain')
+
+
+@mod.route('/sitemap.xml')
+def sitemap():
+    url_root = request.url_root[:-1]
+    pep_ids = [p.id for p in Pep.query.all()]
+    xml = render_template('sitemap.xml', url_root=url_root, pep_ids=pep_ids)
+    return Response(xml, mimetype='text/xml')
