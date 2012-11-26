@@ -74,6 +74,7 @@ def pep_view_raw(pep_number):
 
 
 @mod.route('/sitemap.xml')
+@cached(timeout=60 * 60)
 def sitemap():
     url_root = request.url_root[:-1]
     pep_ids = [p.id for p in Pep.query.all()]

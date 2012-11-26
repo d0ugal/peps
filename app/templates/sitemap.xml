@@ -8,4 +8,8 @@
       <loc>{{url_root}}/{{pep_id}}/</loc>
       <changefreq>weekly</changefreq>
     </url>{% endfor %}
+    {% for pep_id in pep_ids %}<url>
+      <loc>{{url_root}}/{{pep_id}}.txt</loc>
+      <changefreq>weekly</changefreq>
+    </url>{% endfor %}
 </urlset>
