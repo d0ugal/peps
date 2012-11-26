@@ -228,6 +228,8 @@ def fetch_peps():
 
     for number, path, raw, contents, properties in results:
 
+        contents = contents.replace("http://www.python.org/dev/peps/pep-", "http://www.peps.io/")
+
         title = properties.pop('title')
 
         pep, created = get_or_create(Pep, commit=False, number=number, title=title, defaults={

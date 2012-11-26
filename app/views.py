@@ -4,7 +4,6 @@ from sqlalchemy.orm import undefer
 
 from pep.models import Pep
 from pep.tasks import sort_peps
-from util.db import get_or_404
 from util.cache import cached
 
 mod = Blueprint('base', __name__)
@@ -37,19 +36,7 @@ def index():
 def search():
 
     q = request.args.get("q")
-
-    sql = """
-    SELECT
-        pep.id AS pep_id, pep.number AS pep_number, ts_headline('english', pep.title, query) AS pep_title,
-        pep.added AS pep_added, pep.updated AS pep_updated, pep.properties AS
-        pep_properties, pep.filename AS pep_filename,
-        ts_rank_cd('{0.1, 0.8, 0.9, 1.0}', search_col, query) AS rank
-    FROM pep, plainto_tsquery(:q) query
-    WHERE query @@ search_col
-    ORDER BY rank DESC;
-    """
-
-    results = Pep.query.session.query(Pep).from_statement(sql).params(q=q).all()
+    results = Pep.query.search(q)
 
     return render_template('base/search.html',
         term=q,
@@ -61,7 +48,8 @@ def search():
 @cached(timeout=60 * 60)
 def pep_view(pep_number):
 
-    pep = get_or_404(Pep.query.options(undefer('content')), number=pep_number)
+    pep = Pep.query.options(undefer('content')
+        ).filter_by(number=pep_number).first_or_404()
 
     return render_template('base/pep_view.html',
         pep=pep,
@@ -72,7 +60,8 @@ def pep_view(pep_number):
 @cached(timeout=60 * 60)
 def pep_view_raw(pep_number):
 
-    pep = get_or_404(Pep.query.options(undefer('raw_content')), number=pep_number)
+    pep = Pep.query.options(undefer('raw_content')
+            ).filter_by(number=pep_number).first_or_404()
 
     return Response(pep.raw_content, mimetype='text/plain')
 

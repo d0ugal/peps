@@ -1,6 +1,9 @@
 {% extends "base/base.html" %}
 
 {% block title %} PEP {{ pep.number }} -- {{ pep.title }} -- {% endblock %}
+{% block author %}{{ pep.properties.author|safe }}{% endblock %}
+{% block description %}{{ pep.abstract() }}{% endblock %}
+{% block keywords %}{{ pep.keywords()|join(', ') }}{% endblock %}
 
 {% block content %}
 

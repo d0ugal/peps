@@ -1,5 +1,3 @@
-from flask import abort
-from sqlalchemy.orm import Query
 from sqlalchemy.orm.exc import NoResultFound
 
 from app import db
@@ -24,21 +22,3 @@ def get_or_create(model, commit=True, **kwargs):
         created = True
 
     return model_instance, created
-
-
-def get_or_404(model_or_query, **kwargs):
-
-    lookup = kwargs.copy()
-
-    try:
-
-        if not isinstance(model_or_query, Query):
-            query = model_or_query.query
-        else:
-            query = model_or_query
-
-        model_instance = query.filter_by(**lookup).one()
-    except NoResultFound:
-        abort(404)
-
-    return model_instance

@@ -7,6 +7,7 @@ gevent==0.13.8
 gunicorn==0.15.0
 Jinja2==2.6
 psycopg2==2.4.5
+pyquery==1.2.3
 requests==0.14.2
 
 http://hg.sqlalchemy.org/sqlalchemy/archive/default.zip

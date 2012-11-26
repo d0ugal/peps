@@ -1,6 +1,4 @@
 body{
-    font-family: Palatino,"Palatino Linotype",serif
-    padding-top: 20px;
     padding-bottom: 40px;
     background-color: #f0f0f0;
 }
@@ -75,6 +73,7 @@ body{
 }
 
 pre{
+  font-family: 'Ubuntu Mono', monospace;
   border: none;
   background-color: transparent;
 }
