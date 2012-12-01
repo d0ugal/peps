@@ -12,6 +12,13 @@
     <link href="{{ url_for('static', filename='bootstrap/css/bootstrap.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='pep.css') }}" rel="stylesheet">
 
+    <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="/pep-a-day.rss" />
+    <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="/pep-a-weekday.rss" />
+    <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="/pep-a-week.rss" />
+    <link rel="alternate" type="application/atom+xml" title="Atom 1.0" href="/pep-a-day.atom" />
+    <link rel="alternate" type="application/atom+xml" title="Atom 1.0" href="/pep-a-weekday.atom" />
+    <link rel="alternate" type="application/atom+xml" title="Atom 1.0" href="/pep-a-week.atom" />
+
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -42,7 +49,6 @@
       <div class="row-fluid marketing">
         {% block content %}{% endblock %}
       </div>
-
 
     </div>
 
