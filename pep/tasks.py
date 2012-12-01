@@ -233,7 +233,12 @@ def fetch_peps():
             run('hg clone http://hg.python.org/peps ~/peps/')
             put(join(dirname(abspath(__file__)), 'hg_config'), '~/.hgrc')
             with cd('~/peps/'):
-                run('hg commit -m "sdf"')
+                # So, Mercurial is annoying me. Half of the time after doing
+                # a clean checkout its showin that there are file changes.
+                # However, a diff shows nothing - I think its a file
+                # permission thing... but anyway, I don't care what it is -
+                # so doin a commit fixes it.
+                run('hg commit -m "Hackety Hackety Hack!"')
                 run('hg update --clean')
                 run('hg kwexpand')
             run('zip -q -r ~/peps.zip ./peps/')
