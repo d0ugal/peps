@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, redirect
 from flask import request, Response
 from sqlalchemy.orm import undefer
 
@@ -54,6 +54,14 @@ def pep_view(pep_number):
     return render_template('base/pep_view.html',
         pep=pep,
     )
+
+
+@mod.route('/<int:pep_number>/<file>')
+@cached(timeout=60 * 60)
+def pep_view_file_redirect(pep_number, file):
+
+    url = "http://www.python.org/dev/peps/pep-%04d/%s" % (pep_number, file)
+    return redirect(url)
 
 
 @mod.route('/<int:pep_number>.txt')
