@@ -11,3 +11,8 @@ pyquery==1.2.3
 requests==0.14.2
 
 http://hg.sqlalchemy.org/sqlalchemy/archive/default.zip
+
+Fabric==1.5.1
+boto==2.6.0
+# HEAD of master on 17/10/2011
+-e git://github.com/caktus/fabulaws.git@1e09efe62e493e08f84e3dc8ee9143905f7b7bb4#egg=fabulaws

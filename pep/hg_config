@@ -1,0 +1,15 @@
+[paths]
+default = http://hg.python.org/peps
+
+[extensions]
+keyword=
+
+[keyword]
+*.txt =
+
+[ui]
+username = Dougal Matthews <dougal85@gmail.com>
+
+[keywordmaps]
+Revision = {node|short}
+Date = {date|utcdate}

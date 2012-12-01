@@ -1,8 +1,11 @@
 from docutils import core
-from docutils.utils import SystemMessage
+from fabric.api import sudo, put, cd, run, get
+from fabulaws.ec2 import SmallLucidInstance
 from glob import glob
+from os import environ
+from os.path import dirname, abspath, join
 from re import compile
-from requests import get
+from requests import get as http_get
 from tempfile import mkdtemp, NamedTemporaryFile
 from zipfile import ZipFile
 
@@ -21,7 +24,7 @@ def pep_numbers(base_dir):
 
     matcher = compile("(\d+)")
 
-    for full_path in glob("%s/peps-*/pep-*.txt" % base_dir):
+    for full_path in glob("%s/pep-*.txt" % base_dir):
 
         file_name = full_path.rsplit('/', 1)[-1]
         a = matcher.search(file_name)
@@ -208,6 +211,10 @@ def sort_peps(peps):
     )
 
 
+class OldSmallLucidInstance(SmallLucidInstance):
+    run_upgrade = False
+
+
 def fetch_peps():
 
     tmp_file = NamedTemporaryFile(delete=False)
@@ -215,8 +222,32 @@ def fetch_peps():
 
     # Get the remote file and save it. I had some issues loading an in memory
     # zip file for some reason...
-    f = get(zip_url)
-    tmp_file.write(f.content)
+
+    try:
+
+        environ['AWS_ACCESS_KEY_ID'], environ['AWS_SECRET_ACCESS_KEY']
+
+        with OldSmallLucidInstance(terminate=True):
+
+            sudo('apt-get -y -q install mercurial zip')
+            run('hg clone http://hg.python.org/peps ~/peps/')
+            put(join(dirname(abspath(__file__)), 'hg_config'), '~/.hgrc')
+            with cd('~/peps/'):
+                run('hg commit -m "sdf"')
+                run('hg update --clean')
+                run('hg kwexpand')
+            run('zip -q -r ~/peps.zip ./peps/')
+            get('~/peps.zip', tmp_file)
+
+    except KeyError:
+        print '*' * 80
+        print "AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY environ vars need to be set."
+        print "DEFAULTING TO THE non-mercurial pull method (Revisions and dates will be missing)"
+        print '*' * 80
+        f = http_get(zip_url)
+        tmp_file.write(f.content)
+
+    pep_base = join(tmp_dir, 'peps')
 
     # Extract the tmp file to a tmp directory.
     z = ZipFile(tmp_file)
@@ -224,7 +255,7 @@ def fetch_peps():
     z.extractall(tmp_dir)
 
     results = ((number,) + pep_file_to_metadata(filename)
-        for number, filename in pep_numbers(tmp_dir))
+        for number, filename in pep_numbers(pep_base))
 
     for number, path, raw, contents, properties in results:
 
