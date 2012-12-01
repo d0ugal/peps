@@ -75,6 +75,12 @@ class Pep(db.Model):
 
         return p
 
+    def url(self):
+        return "/%s/" % self.id
+
+    def sorted_properties(self):
+        return sorted(self.properties.items())
+
 
 trig_ddl = DDL("""
 ALTER TABLE pep ADD COLUMN search_col tsvector;
