@@ -4,7 +4,7 @@ from fabulaws.ec2 import SmallLucidInstance
 from glob import glob
 from os import environ
 from os.path import dirname, abspath, join
-from re import compile
+from re import compile, sub, findall, UNICODE
 from requests import get as http_get
 from tempfile import mkdtemp, NamedTemporaryFile
 from zipfile import ZipFile
@@ -95,6 +95,27 @@ def rst2html(lines):
     # nasty hack in the end here. Sorry, but meh.
     return (parts['body_pre_docinfo'] + parts['fragment']).replace("<hr />", "")
 
+ANGLE_BRACKETS = compile(ur'\<.+\>', UNICODE)
+ROUND_BRACKETS = compile(ur'\(([\w\s\-\.]+)\)', UNICODE)
+
+
+def tidy_author(authors):
+
+    authors = authors.replace(u"(Pfizer, Inc.)", u"")
+    cleaned = []
+
+    for author in authors.split(u","):
+
+        author = author.strip()
+        author = sub(ANGLE_BRACKETS, "", author).strip()
+
+        if "(" in author:
+            author = u",".join(findall(ROUND_BRACKETS, author))
+
+        cleaned.append(author)
+
+    return cleaned
+
 
 def pep_file_to_metadata(path):
     """
@@ -125,6 +146,9 @@ def pep_file_to_metadata(path):
             key = key.strip().lower()
             value = value.strip()
 
+            if key == "date":
+                value.replace("$Date: ", "")
+                value.replace(" $", "")
             metadata.append((key, value))
         else:
             key, value = metadata[-1]
@@ -132,6 +156,9 @@ def pep_file_to_metadata(path):
             metadata[-1] = key, value
 
     pep_type = get_pep_type(lines)
+    metadata = dict(metadata)
+
+    metadata['author'] = u', '.join(tidy_author(metadata['author']))
 
     # If its the plain text, we already have the headers - for rst that
     # doesn't matter and it actually needs the heades.
@@ -143,7 +170,7 @@ def pep_file_to_metadata(path):
 
     raw = ''.join(lines)
 
-    return path, raw, contents, dict(metadata)
+    return path, raw, contents, metadata
 
 
 def sort_peps(peps):
@@ -243,6 +270,7 @@ def fetch_peps():
                 run('hg kwexpand')
             run('zip -q -r ~/peps.zip ./peps/')
             get('~/peps.zip', tmp_file)
+            pep_base = join(tmp_dir, 'peps')
 
     except KeyError:
         print '*' * 80
@@ -251,8 +279,7 @@ def fetch_peps():
         print '*' * 80
         f = http_get(zip_url)
         tmp_file.write(f.content)
-
-    pep_base = join(tmp_dir, 'peps')
+        pep_base = join(tmp_dir, 'peps-*')
 
     # Extract the tmp file to a tmp directory.
     z = ZipFile(tmp_file)
