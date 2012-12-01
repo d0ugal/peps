@@ -75,6 +75,9 @@ class Pep(db.Model):
 
         return p
 
+    def url(self):
+        return "/%s/" % self.id
+
 
 trig_ddl = DDL("""
 ALTER TABLE pep ADD COLUMN search_col tsvector;
