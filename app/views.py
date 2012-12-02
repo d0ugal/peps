@@ -74,6 +74,13 @@ def pep_view_raw(pep_number):
     return Response(pep.raw_content, mimetype='text/plain')
 
 
+@mod.route('/pep-<int:pep_number>')
+@cached(timeout=60 * 60)
+def pep_redirect(pep_number):
+
+    return redirect("/%s/" % pep_number)
+
+
 @mod.route('/sitemap.xml')
 @cached(timeout=60 * 60)
 def sitemap():
