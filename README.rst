@@ -1,6 +1,10 @@
-Alternative Index of Python Enhancement Proposals (PEPs)
+A better way to view PEPs.
 ========================================================
 
-An new way to view all the PEPs.
+A new way to read and search python enhancement proposals (PEPs). Featuring;
 
-http://www.peps.io/
+- Syntax Highlighting
+- Short URLs
+- Full text search
+
+Visit it now at; http://www.peps.io/
