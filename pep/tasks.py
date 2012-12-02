@@ -146,8 +146,9 @@ def pep_file_to_metadata(path):
             key = key.strip().lower()
             value = value.strip()
 
-            if key == "date":
+            if key == "last-modified" or key == "version":
                 value.replace("$Date: ", "")
+                value.replace("$Revision: ", "")
                 value.replace(" $", "")
             metadata.append((key, value))
         else:
