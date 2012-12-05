@@ -1,0 +1,34 @@
+{% extends "base/base.html" %}
+
+{% block title %} PEP Stats {% endblock %}
+{% block description %}Statistics about the PEPs{% endblock %}
+
+{% block content %}
+
+    <table class="table">
+        <tr>
+            <th>Author</th>
+            <th>Count</th>
+        </tr>
+        {% for author, count in top_authors %}
+            <tr>
+                <td>{{ author }}</td>
+                <td>{{ count }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <table class="table">
+        <tr>
+            <th>Word</th>
+            <th>Count</th>
+        </tr>
+        {% for word, count in top_words %}
+            <tr>
+                <td>{{ word }}</td>
+                <td>{{ count }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}

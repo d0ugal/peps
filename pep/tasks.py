@@ -1,3 +1,4 @@
+from datetime import datetime
 from docutils import core
 from fabric.api import sudo, put, cd, run, get
 from fabulaws.ec2 import SmallLucidInstance
@@ -107,12 +108,12 @@ def tidy_author(authors):
     for author in authors.split(u","):
 
         author = author.strip()
-        author = sub(ANGLE_BRACKETS, "", author).strip()
+        author = sub(ANGLE_BRACKETS, u"", author).strip()
 
-        if "(" in author:
+        if u"(" in author:
             author = u",".join(findall(ROUND_BRACKETS, author))
 
-        cleaned.append(author)
+        cleaned.append(author.strip())
 
     return cleaned
 
@@ -147,9 +148,9 @@ def pep_file_to_metadata(path):
             value = value.strip()
 
             if key == "last-modified" or key == "version":
-                value.replace("$Date: ", "")
-                value.replace("$Revision: ", "")
-                value.replace(" $", "")
+                value = value.replace("$Date: ", "")
+                value = value.replace("$Revision: ", "")
+                value = value.replace(" $", "")
             metadata.append((key, value))
         else:
             key, value = metadata[-1]
@@ -159,7 +160,7 @@ def pep_file_to_metadata(path):
     pep_type = get_pep_type(lines)
     metadata = dict(metadata)
 
-    metadata['author'] = u', '.join(tidy_author(metadata['author']))
+    metadata['author'] = u','.join(tidy_author(metadata['author']))
 
     # If its the plain text, we already have the headers - for rst that
     # doesn't matter and it actually needs the heades.
@@ -293,19 +294,33 @@ def fetch_peps():
     for number, path, raw, contents, properties in results:
 
         contents = contents.replace("http://www.python.org/dev/peps/pep-", "http://www.peps.io/")
-
         title = properties.pop('title')
+        patterns = ["%Y-%m-%d %H:%M:%S", "%Y/%m/%d %H:%M:%S"]
+
+        if properties.get('last-modified'):
+            for pattern in patterns:
+                try:
+                    dt = datetime.strptime(properties.get('last-modified'),  pattern)
+                    break
+                except ValueError:
+                    dt = None
+
+        filename = path.rsplit("/")[-1]
 
         pep, created = get_or_create(Pep, commit=False, number=number, title=title, defaults={
             'properties': properties,
-            'filename': path.rsplit("/")[-1],
+            'filename': filename,
             'content': contents,
             'raw_content': raw,
+            'updated': dt,
         })
 
         if not created:
-            pep.content = contents
             pep.properties = properties
+            pep.filename = filename
+            pep.content = contents
+            pep.raw_content = raw
+            pep.updated = dt
             db.session.add(pep)
 
     db.session.commit()

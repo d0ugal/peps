@@ -88,3 +88,30 @@ def sitemap():
     pep_ids = [p.id for p in Pep.query.all()]
     xml = render_template('sitemap.xml', url_root=url_root, pep_ids=pep_ids)
     return Response(xml, mimetype='text/xml')
+
+
+@mod.route('/stats/')
+@cached(timeout=60 * 60)
+def stats():
+
+    top_authors = """
+    SELECT
+        unnest(regexp_split_to_array(properties->'author', ',')) as author,
+        count(*) as count
+    FROM pep
+    GROUP BY author
+    ORDER BY count desc, author
+    LIMIT 20;
+    """
+
+    top_words = """
+        SELECT word, nentry
+        FROM ts_stat('SELECT search_col FROM pep')
+        ORDER BY nentry DESC, ndoc DESC, word
+        LIMIT 30;
+    """
+
+    return render_template('base/stats.html',
+        top_authors=Pep.query.session.execute(top_authors).fetchall(),
+        top_words=Pep.query.session.execute(top_words).fetchall(),
+    )
