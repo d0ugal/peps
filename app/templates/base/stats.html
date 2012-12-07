@@ -5,10 +5,12 @@
 
 {% block content %}
 
+    <h3>Number of PEPs by author</h3>
+
     <table class="table">
         <tr>
             <th>Author</th>
-            <th>Count</th>
+            <th>PEP Count</th>
         </tr>
         {% for author, count in top_authors %}
             <tr>
@@ -18,10 +20,12 @@
         {% endfor %}
     </table>
 
+    <h3>Most commonly used words in PEPs <br/><small>This is after stemming which is why some words are shortened like 'module' becomes 'modul'</small></h3>
+
     <table class="table">
         <tr>
             <th>Word</th>
-            <th>Count</th>
+            <th>Occurrences in PEPs</th>
         </tr>
         {% for word, count in top_words %}
             <tr>

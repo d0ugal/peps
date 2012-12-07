@@ -85,7 +85,7 @@ def pep_redirect(pep_number):
 @cached(timeout=60 * 60)
 def sitemap():
     url_root = request.url_root[:-1]
-    pep_ids = [p.id for p in Pep.query.all()]
+    pep_ids = [p.number for p in Pep.query.order_by(Pep.number.asc())]
     xml = render_template('sitemap.xml', url_root=url_root, pep_ids=pep_ids)
     return Response(xml, mimetype='text/xml')
 
@@ -101,14 +101,14 @@ def stats():
     FROM pep
     GROUP BY author
     ORDER BY count desc, author
-    LIMIT 20;
+    LIMIT 10;
     """
 
     top_words = """
         SELECT word, nentry
         FROM ts_stat('SELECT search_col FROM pep')
         ORDER BY nentry DESC, ndoc DESC, word
-        LIMIT 30;
+        LIMIT 10;
     """
 
     return render_template('base/stats.html',

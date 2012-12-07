@@ -312,7 +312,6 @@ def fetch_peps():
             'filename': filename,
             'content': contents,
             'raw_content': raw,
-            'updated': dt,
         })
 
         if not created:
@@ -320,7 +319,8 @@ def fetch_peps():
             pep.filename = filename
             pep.content = contents
             pep.raw_content = raw
-            pep.updated = dt
+            if dt:
+                pep.updated = dt
             db.session.add(pep)
 
     db.session.commit()
