@@ -153,7 +153,8 @@ def pep_a_(interval, format):
     feed = AtomFeed(title, feed_url=request.url, url=request.url_root)
 
     for article in peps:
-        feed.add(article.title, article.content,
+        feed.add("PEP %s -- %s" % (article.number, article.title),
+                article.content,
                  content_type='html',
                  author=article.properties['author'],
                  url=make_external(article.url()),

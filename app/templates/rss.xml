@@ -19,7 +19,7 @@ beginner-intermediate programmer.</description>
 
 {% for post in posts %}
 <item>
-  <title>{{post.title}}</title>
+  <title>PEP {{post.number}} -- {{post.title}}</title>
   <link>{{post.url()}}</link>
   <pubDate>{{post.added}}</pubDate>
   <description>{{post.abstract()}}</description>
