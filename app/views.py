@@ -1,13 +1,15 @@
-from datetime import datetime
+from datetime import datetime, date
 from urlparse import urljoin
 
-from flask import abort, request, Response, Blueprint, render_template, redirect
+from flask import (abort, request, Response, Blueprint, render_template,
+    redirect)
 from sqlalchemy.orm import undefer
 from werkzeug.contrib.atom import AtomFeed
 
 from pep.models import Pep
 from pep.tasks import sort_peps
-from pep.reading import passed_days, passed_weeks, passed_weekdays, get_reading_list
+from pep.reading import (passed_days, passed_weeks, passed_weekdays,
+    get_reading_list, THE_BEGINNING_OF_TIME)
 from util.cache import cached
 
 mod = Blueprint('base', __name__)
@@ -125,9 +127,20 @@ def stats():
     )
 
 
+@mod.route('/pep-a-day/')
+@cached(timeout=60 * 60 * 24)  # 1 day
+def pep_a_day():
+    return render_template('base/pep_a_day.html')
+
+
 @mod.route('/pep-a-<interval>.<format>')
 @cached(timeout=60 * 60 * 24)  # 1 day
 def pep_a_(interval, format):
+
+    today = date.today()
+
+    if THE_BEGINNING_OF_TIME > today:
+        return redirect('/pep-a-day/', code=301)
 
     intervals = {
         'day': passed_days(),

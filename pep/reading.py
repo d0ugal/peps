@@ -7,7 +7,7 @@ from pep.models import Pep
 # Totally arbitrary date. We just need a starting point to count the number
 # of passed days from. Also THE BEGINNING OF TIME sounds cool - just make sure
 # you say it in a booming voice.
-THE_BEGINNING_OF_TIME = date(2012, 11, 29)
+THE_BEGINNING_OF_TIME = date(2013, 1, 1)
 
 
 def passed_days():
