@@ -293,6 +293,8 @@ def fetch_peps():
 
     for number, path, raw, contents, properties in results:
 
+        print number
+
         contents = contents.replace("http://www.python.org/dev/peps/pep-", "http://www.peps.io/")
         title = properties.pop('title')
         patterns = ["%Y-%m-%d %H:%M:%S", "%Y/%m/%d %H:%M:%S"]
